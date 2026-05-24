@@ -27,8 +27,9 @@ import pandas as pd
 
 PAPER = HAST_ROOT / "01_paper_story" / "14_chinese_paper_full_cn.md"
 FIG_DIR = HAST_ROOT / "02_main_figures"
-PAPER_TABLE_DIR = HAST_ROOT / "03_main_tables" / "paper_tables"
-TABLE_DIR = HAST_ROOT / "03_main_tables" / "tables"
+MAIN_ARTIFACTS = ROOT / "artifacts"
+PAPER_TABLE_DIR = MAIN_ARTIFACTS / "source_tables" / "paper_tables"
+TABLE_DIR = MAIN_ARTIFACTS / "source_tables" / "tables"
 OUT_DIR = ROOT / "outputs" / "figure_audit"
 
 

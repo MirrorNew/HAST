@@ -12,6 +12,9 @@ data/**/*.zip
 # Large/generated experiment artifacts.
 runs/
 outputs/
+artifacts/source_tables/
+artifacts/figures/
+artifacts/reports/
 *.log
 llm_calls*.jsonl
 *_raw.csv
