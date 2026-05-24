@@ -123,6 +123,7 @@
 - `fig23_bounded_generation_controls_scan_cost.png`
 - `Gemini-Framework.png`
 - `fig13_12graph_quality_runtime_all_methods.png`
+- `fig17_hast_quality_speed_panel.png`
 - `fig10_gcc_curves_12graphs.png`
 - `fig11_cnbi_curves_12graphs.png`
 - `fig20_framework_search_time.png`
@@ -131,6 +132,10 @@
 - `fig13_final_candidate_interpretability.png`
 - `scaling_full_eval_500_to_10k_unified.png`
 - `runtime_only_scaling_500_to_1000k_unified.png`
+
+保留但不作为 HAST 主实验重画的图：
+
+- `fig21_obs1_basic_baseline_same_r_horizontal.png`：Observation 1 的 basic baseline same-R residual fragmentation 例子，不依赖 HAST 三阶段搜索。
 
 需要更新的文字：
 

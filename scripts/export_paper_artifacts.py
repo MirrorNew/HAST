@@ -6,6 +6,7 @@ PAPER_ARTIFACTS_TO_REFRESH = [
     "fig23_bounded_generation_controls_scan_cost.png",
     "Gemini-Framework.png",
     "fig13_12graph_quality_runtime_all_methods.png",
+    "fig17_hast_quality_speed_panel.png",
     "fig10_gcc_curves_12graphs.png",
     "fig11_cnbi_curves_12graphs.png",
     "fig20_framework_search_time.png",
@@ -16,9 +17,18 @@ PAPER_ARTIFACTS_TO_REFRESH = [
     "runtime_only_scaling_500_to_1000k_unified.png",
 ]
 
+PAPER_ARTIFACTS_TO_KEEP = [
+    "fig21_obs1_basic_baseline_same_r_horizontal.png",
+]
+
 
 def main() -> None:
-    print({"paper_artifacts_to_refresh": PAPER_ARTIFACTS_TO_REFRESH})
+    print(
+        {
+            "paper_artifacts_to_refresh": PAPER_ARTIFACTS_TO_REFRESH,
+            "paper_artifacts_to_keep": PAPER_ARTIFACTS_TO_KEEP,
+        }
+    )
 
 
 if __name__ == "__main__":
