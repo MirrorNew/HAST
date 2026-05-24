@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local-only experiment data.
+data/benchmarks/raw/
+data/baseline_records/
+data/baseline_data/
+data/**/*.zip
+
+# Large/generated experiment artifacts.
+runs/
+outputs/
+*.log
+llm_calls*.jsonl
+*_raw.csv
+*_records.csv
+table_12graph_extended_curve_records.csv
+unified_curve_records.csv
+
+# Secrets/local machine config.
+.env
+*.key
+local_paths*.json

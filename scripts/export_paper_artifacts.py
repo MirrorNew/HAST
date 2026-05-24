@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+"""Export paper figures/tables from completed HAST main outputs."""
+
+PAPER_ARTIFACTS_TO_REFRESH = [
+    "fig22_relative_credit_allocation_effect.png",
+    "fig23_bounded_generation_controls_scan_cost.png",
+    "Gemini-Framework.png",
+    "fig13_12graph_quality_runtime_all_methods.png",
+    "fig10_gcc_curves_12graphs.png",
+    "fig11_cnbi_curves_12graphs.png",
+    "fig20_framework_search_time.png",
+    "fig18_hast_mechanism_compression.png",
+    "fig14_component_knockout_ablation.png",
+    "fig13_final_candidate_interpretability.png",
+    "scaling_full_eval_500_to_10k_unified.png",
+    "runtime_only_scaling_500_to_1000k_unified.png",
+]
+
+
+def main() -> None:
+    print({"paper_artifacts_to_refresh": PAPER_ARTIFACTS_TO_REFRESH})
+
+
+if __name__ == "__main__":
+    main()
