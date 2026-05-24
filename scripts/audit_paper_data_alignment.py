@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
-HAST_ROOT = ROOT.parents[1]
+HAST_ROOT = ROOT.parent
 sys.path.insert(0, str(ROOT))
 
 import matplotlib

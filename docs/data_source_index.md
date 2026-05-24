@@ -1,6 +1,6 @@
 # Data Source Index
 
-`main` is the intended independent workspace for future HAST experiments.
+`HAST2026/main` is the intended independent workspace for future HAST experiments.
 
 ## Canonical Local Sources
 

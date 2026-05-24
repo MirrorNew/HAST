@@ -1,6 +1,6 @@
 # HAST-Lite-Full Main Project
 
-This directory is the independent HAST2026 implementation workspace. It is designed to run without importing the old `research/e26f` experiment tree.
+This directory is the independent HAST2026 implementation workspace. It is designed to run without importing the old research experiment tree.
 
 ## What Is Included
 

@@ -2,7 +2,7 @@
 
 ## 1. 目标
 
-本文件记录 `HAST2026/07_source_code/main/` 的完整实施计划、实验预算、数据策略和论文图表更新清单。该目录应成为后续 HAST 实验的独立主项目：代码、baseline、metric、配置、文档和本地数据都在该目录内闭环，不再依赖旧的 `research/e26f` 路径。
+本文件记录 `HAST2026/main/` 的完整实施计划、实验预算、数据策略和论文图表更新清单。该目录应成为后续 HAST 实验的独立主项目：代码、baseline、metric、配置、文档和本地数据都在该目录内闭环，不再依赖旧的研究实验路径。
 
 ## 2. 固定框架
 
@@ -187,7 +187,7 @@ python scripts/export_paper_artifacts.py
 验收标准：
 
 - smoke test 能运行。
-- `main/` 不 import 旧 `research/e26f` 路径。
+- `main/` 不 import 旧研究实验路径。
 - baseline/metric/evaluator 代码在 `main/` 内自洽。
 - 本地数据已转移，但 `.gitignore` 阻止上传。
 - 本文件完整记录计划、预算、实验和论文更新清单。
