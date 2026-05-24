@@ -18,6 +18,11 @@ The current paper-facing figures are generated from:
 - `artifacts/source_tables/tables/scaling_full_eval_500_to_10k_unified.csv`
 - `artifacts/source_tables/tables/runtime_only_scaling_500_to_1000k_unified.csv`
 
+Historical search-framework data mirrors are indexed in `docs/search_framework_data_index.md` and stored locally under:
+
+- `artifacts/source_tables/historical_search_frameworks/`
+- `data/search_framework_records/raw/`
+
 ## Canonical Local Scripts
 
 - `scripts/sync_record_based_paper_tables.py`: synchronizes derived summary tables to the record-derived 12-graph metrics.

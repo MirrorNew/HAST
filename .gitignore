@@ -2,16 +2,23 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
+.idea/
 
 # Local-only experiment data.
 data/benchmarks/raw/
 data/baseline_records/
 data/baseline_data/
+data/search_framework_records/raw/
 data/**/*.zip
 
 # Large/generated experiment artifacts.
 runs/
 outputs/
+search_frameworks/**/runs/
+search_frameworks/**/outputs/
+search_frameworks/**/tables/
+search_frameworks/**/reports/
+search_frameworks/**/figures/
 artifacts/source_tables/
 artifacts/figures/
 artifacts/reports/
