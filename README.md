@@ -5,13 +5,15 @@ This directory is the independent HAST2026 implementation workspace. It is desig
 ## What Is Included
 
 - `hast/`: three-stage HAST-Lite-Full search code, candidate validation, Stage 2 bound induction, ranking, and Pareto selection.
-- `baselines/`: HDA-original, HDA-fast, CoreHD-fast, and DC baseline implementations.
+- `baselines/`: HDA-original, HDA-fast, CoreHD-original, CoreHD-fast, DC, KCore, CLUC/ClusterRank-style, CI, NDC/NCDC/NDJC, and documented Python fallbacks for BPD/MinSum and GND-style baselines.
 - `metrics/`: GCC/R, NCC, cNBI, AUC-cNBI, final metrics, and runtime summaries.
 - `scripts/`: smoke test, dry-run main search, motivation experiment contract, full validation, scaling contract, and paper artifact export list.
 - `configs/`: fixed experiment parameters.
-- `search_frameworks/`: historical search-framework code mirrors for ERA-like, MCTS-AHD-like, Clade-AHD-like, FunSearch-like, AlphaEvolve-like, early HAST/HAST-FAC, and motivation experiments.
+- `search_frameworks/`: search framework implementations only, including ERA-like generic search, DACTS-style search, prior HAST, and HAST-FAC.
+- `experiments/`: current paper-facing experiment/table entrypoints; old dated exploratory scripts are not kept here.
+- `plotting/`: current paper-facing figure generation from recorded CSV tables.
 - `docs/`: full experiment plan and reproduction notes.
-- `data/`: local data area. Raw benchmark data and baseline records are present locally but excluded from GitHub.
+- `network/`: local graph inputs needed by smoke tests and figure reconstruction. Paper-facing baseline tables live under `artifacts/source_tables/`.
 
 ## Project Architecture
 
@@ -19,34 +21,48 @@ This directory is the independent HAST2026 implementation workspace. It is desig
 HAST2026/main/
 ├── hast/                     # Canonical three-stage HAST-Lite-Full implementation
 │   ├── candidate.py          # Candidate contract, validation, and execution helpers
-│   ├── search.py             # Stage 1 free search and Stage 3 bounded search orchestration
+│   ├── search1_3.py             # Stage 1 free search and Stage 3 bounded search orchestration
 │   ├── stage2.py             # Log-induced bound induction with the fixed 10-call budget
 │   ├── ranking.py            # Unified proxy ranking and Pareto final selection
 │   └── data.py               # Benchmark loading helpers and fixture access
-├── baselines/                # HDA-original, HDA-fast, CoreHD-fast, DC
+├── baselines/                # Traditional/strong baseline orderings and documented fallbacks
 ├── metrics/                  # Fragmentation metrics and curve summaries
 ├── configs/                  # Fixed seeds, graph sets, LLM settings, and budgets
 ├── scripts/                  # Reproducible entrypoints for search, validation, scaling, figures, audit
-├── search_frameworks/        # Historical framework mirrors and audit-only code
-│   └── historical/
-│       ├── tree_search_ablation_20260520/
-│       ├── hast_experiment_20260521/
-│       ├── paper_problem_solution_reframe_20260522/
-│       └── iclr_minimal_boost_20260522/
-├── data/
-│   ├── fixtures/             # Tiny tracked smoke-test graph
-│   ├── benchmarks/raw/       # Local-only benchmark edgelists
-│   ├── baseline_records/     # Local-only baseline record cache
-│   └── search_framework_records/raw/
-│       └── ...               # Local-only raw historical search traces
+├── search_frameworks/        # Search framework implementations only
+│   ├── era_like.py
+│   ├── mcts_ahd_like.py
+│   ├── clade_ahd_like.py
+│   ├── funsearch_like.py
+│   ├── alphaevolve_like.py
+│   ├── generic_llm_search_ablation.py
+│   ├── dacts_style_search.py
+│   ├── hast_legacy_search.py
+│   ├── hast_fac_online_search.py
+│   └── runtime_deps/          # Local copied runtime modules; no external research-tree imports
+├── experiments/              # Current table/experiment contracts, no dated historical folders
+│   ├── paper_source_tables.py
+│   ├── motivation_observation_contract.py
+│   └── scaling_contract.py
+├── plotting/                 # Current paper figure regeneration
+│   └── paper_figures.py
+├── network/                  # Edgelists used by smoke tests and figure reconstruction
 ├── artifacts/
 │   ├── source_tables/        # Local-only canonical CSV sources for paper figures/tables
+│   │   ├── benchmark_12graph/
+│   │   │   ├── CEnew/point_evaluations/
+│   │   │   ├── ...
+│   │   │   └── Yeast/point_evaluations/
+│   │   ├── motivation_observation/
+│   │   ├── search_runtime/
+│   │   ├── scaling/
+│   │   └── hast_search_evidence/
 │   ├── figures/              # Local regenerated figures
 │   └── reports/              # Local audit reports
-└── docs/                     # Data indexes, figure mapping, experiment plan, reproducibility notes
+└── docs/                     # Paper draft and experiment plan
 ```
 
-The canonical experiment path is `configs -> hast/baselines/metrics -> scripts -> artifacts`. Historical framework code is available for provenance and follow-up analyses, but new paper-facing HAST runs should be launched from `scripts/` and write outputs into `runs/`, `outputs/`, or `artifacts/`.
+The canonical experiment path is `configs -> hast/baselines/metrics -> experiments/scripts -> artifacts -> plotting`. Search framework code lives in `search_frameworks/`; current table-generation and experiment contracts live in `experiments/`; current paper plotting lives in `plotting/`. New paper-facing HAST runs should be launched from `scripts/` or `experiments/` and write outputs into `runs/`, `outputs/`, or `artifacts/`.
 
 ## Fixed HAST Budget
 
@@ -59,9 +75,7 @@ The canonical experiment path is `configs -> hast/baselines/metrics -> scripts -
 
 The following paths are intentionally local-only:
 
-- `data/benchmarks/raw/`
-- `data/baseline_records/`
-- `data/search_framework_records/raw/`
+- large graph inputs beyond `network/`
 - `artifacts/source_tables/`
 - `artifacts/figures/`
 - `artifacts/reports/`
@@ -91,6 +105,6 @@ The full paper run should execute:
 4. Scaling: full evaluation for 500 to 10k; runtime-only for 500 to 1000k.
 5. Paper artifact refresh for all HAST-dependent figures and tables listed in `docs/hast_main_experiment_plan.md`.
 
-## Historical Frameworks
+## Local Provenance Assets
 
-The historical framework mirror is indexed in `docs/search_framework_data_index.md`. Use the public paper label `ERA-like`; historical raw records may still use `PUCT` as the internal CSV/run key, and paper-facing scripts map that key to `ERA-like` during export.
+Prior run records needed for reproducibility are kept inside `main/data/` and `main/artifacts/`. The cross-folder source-map Markdown files were removed so that `main` is the only source boundary. Use the public paper label `ERA-like`; raw records may still use `PUCT` as the internal CSV/run key, and paper-facing scripts map that key to `ERA-like` during export.

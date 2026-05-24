@@ -1,4 +1,4 @@
-# HAST-Lite-Full 主实验计划
+# HAST 主实验计划
 
 ## 1. 目标
 
@@ -50,8 +50,14 @@
 
 - `HDA-original`: 原始残余图重扫 HDA。
 - `HDA-fast`: lazy-heap HDA，仅在明确标注 fast baseline 的 runtime/scaling 场景使用。
+- `CoreHD-original`: 每步重算 2-core 的原始风格 CoreHD。
 - `CoreHD-fast`: lazy-heap CoreHD-fast，仅在明确标注 fast baseline 的 runtime/scaling 场景使用。
 - `DC`: static degree centrality baseline。
+- `KCore`: static k-core baseline。
+- `CLUC`: ClusterRank/CLUC-style local clustering baseline。
+- `CI`: radius-2 Collective Influence baseline。
+- `NDC/NCDC/NDJC`: local redundancy / neighborhood dissimilarity Python fallbacks。
+- `BPD/MinSum-fallback` 与 `GND-py`: documented Python fallbacks，只用于可运行管线和保守对照，不声称官方复现。
 
 指标：
 
@@ -135,7 +141,7 @@
 
 保留但不作为 HAST 主实验重画的图：
 
-- `fig21_obs1_basic_baseline_same_r_horizontal.png`：Observation 1 的 basic baseline same-R residual fragmentation 例子，不依赖 HAST 三阶段搜索。
+- `fig21_obs1_basic_baseline_same_r_horizontal.png`：Observation 1 的 basic-baseline same-R residual fragmentation 例子。它由 3 个 `Collaboration` same-R case pair 组成，共 6 个 residual-network panels，不属于 HAST 三阶段搜索重跑内容。
 
 需要更新的文字：
 

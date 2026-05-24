@@ -17,7 +17,7 @@ from baselines.algorithms import corehd_fast_order, dc_order, hda_fast_order, hd
 from hast.candidate import make_program
 from hast.config import DATASET_RATES, DATASETS
 from hast.data import read_graph
-from hast.search import evaluate_candidate, evaluate_order_fn
+from hast.search1_3 import evaluate_candidate, evaluate_order_fn
 
 
 BASELINES = {

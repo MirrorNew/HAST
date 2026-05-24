@@ -10,9 +10,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from baselines.algorithms import corehd_fast_order, dc_order, hda_fast_order, hda_original_order
+from baselines.algorithms import (
+    bpd_minsum_fallback_order,
+    ci_order,
+    cluc_order,
+    corehd_fast_order,
+    dc_order,
+    gnd_fallback_order,
+    hda_fast_order,
+    hda_original_order,
+    kcore_order,
+    ncdc_order,
+    ndjc_order,
+)
 from hast.candidate import make_program
-from hast.search import run_three_stage_smoke
+from hast.search1_3 import run_three_stage_smoke
 from metrics.fragmentation import compute_metrics, summarize_metrics
 
 import networkx as nx
@@ -42,7 +54,7 @@ def degree_order(G):
 
 
 def main() -> None:
-    graph = nx.read_edgelist(ROOT / "data" / "fixtures" / "smoke.edgelist", nodetype=int)
+    graph = nx.read_edgelist(ROOT / "network" / "smoke.edgelist", nodetype=int)
     graph = nx.Graph(graph)
     rate = 0.30
     baseline_rows = {}
@@ -51,6 +63,13 @@ def main() -> None:
         "HDA-fast": hda_fast_order,
         "CoreHD-fast": corehd_fast_order,
         "DC": dc_order,
+        "KCore": kcore_order,
+        "CLUC": cluc_order,
+        "CI": ci_order,
+        "NDJC": ndjc_order,
+        "NCDC": ncdc_order,
+        "BPD/MinSum-fallback": bpd_minsum_fallback_order,
+        "GND-py": gnd_fallback_order,
     }.items():
         order = fn(graph, rate)
         metrics = compute_metrics(graph, order, rate=rate, method_time=0.0)

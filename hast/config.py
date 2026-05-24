@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATA_ROOT = PROJECT_ROOT / "data"
-BENCHMARK_ROOT = DATA_ROOT / "benchmarks" / "raw"
+DATA_ROOT = PROJECT_ROOT
+BENCHMARK_ROOT = PROJECT_ROOT / "network"
 RUNS_ROOT = PROJECT_ROOT / "runs"
 OUTPUTS_ROOT = PROJECT_ROOT / "outputs"
 

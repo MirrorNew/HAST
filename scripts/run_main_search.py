@@ -15,7 +15,7 @@ from hast.candidate import make_program
 from hast.config import LLM_DEFAULTS, MAIN_BUDGETS
 from hast.data import generate_powerlaw_network
 from hast.llm import NullLLMProvider
-from hast.search import run_three_stage_smoke
+from hast.search1_3 import run_three_stage_smoke
 
 
 def main() -> None:

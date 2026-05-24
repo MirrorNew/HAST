@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Motivation experiment entrypoint skeleton.
+"""Compatibility wrapper for the motivation experiment contract."""
 
-Observation 2 and Observation 3 reuse the same candidate/evaluator APIs as the
-main search. This script documents the executable group names used by the paper.
-"""
+from __future__ import annotations
 
-OBSERVATION_2_GROUPS = ["GCC/R-only", "Absolute-cNBI", "Relative-Delta-cNBI"]
-OBSERVATION_3_GROUPS = ["Relative-Free", "CostAware-Free", "Bounded-Guided"]
+import sys
+from pathlib import Path
 
 
-def main() -> None:
-    print({"Observation 2": OBSERVATION_2_GROUPS, "Observation 3": OBSERVATION_3_GROUPS, "candidates_per_group": 100})
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from experiments.motivation_observation_contract import main
 
 
 if __name__ == "__main__":

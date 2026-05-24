@@ -15,7 +15,6 @@ from pathlib import Path
 from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
-HAST_ROOT = ROOT.parent
 sys.path.insert(0, str(ROOT))
 
 import matplotlib
@@ -25,11 +24,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-PAPER = HAST_ROOT / "01_paper_story" / "14_chinese_paper_full_cn.md"
-FIG_DIR = HAST_ROOT / "02_main_figures"
 MAIN_ARTIFACTS = ROOT / "artifacts"
-PAPER_TABLE_DIR = MAIN_ARTIFACTS / "source_tables" / "paper_tables"
-TABLE_DIR = MAIN_ARTIFACTS / "source_tables" / "tables"
+PAPER = ROOT / "docs" / "14_chinese_paper_full_cn.md"
+FIG_DIR = MAIN_ARTIFACTS / "figures"
+SOURCE_TABLE_DIR = MAIN_ARTIFACTS / "source_tables"
+BENCHMARK_TABLE_DIR = SOURCE_TABLE_DIR / "benchmark_12graph"
+SEARCH_RUNTIME_TABLE_DIR = SOURCE_TABLE_DIR / "search_runtime"
+SCALING_TABLE_DIR = SOURCE_TABLE_DIR / "scaling"
 OUT_DIR = ROOT / "outputs" / "figure_audit"
 
 
@@ -98,7 +99,7 @@ def approx_equal(a: float | None, b: float | None, tol: float = 5e-3) -> bool:
 
 
 def audit_main_table(paper_main: pd.DataFrame | None, checks: list[Check]) -> pd.DataFrame:
-    csv = pd.read_csv(PAPER_TABLE_DIR / "table_12graph_method_mean_metrics.csv", encoding="utf-8-sig")
+    csv = pd.read_csv(BENCHMARK_TABLE_DIR / "method_mean_metrics.csv", encoding="utf-8-sig")
     if paper_main is None:
         checks.append(Check("5.2 main table", "FAIL", "Could not locate the Markdown main-results table."))
         return csv
@@ -122,26 +123,24 @@ def audit_main_table(paper_main: pd.DataFrame | None, checks: list[Check]) -> pd
             if not approx_equal(paper_v, csv_v, tol):
                 rows.append((r["method"], metric, paper_v, csv_v))
     if rows:
-        checks.append(Check("5.2 main table vs table_12graph_method_mean_metrics.csv", "FAIL", f"{len(rows)} mismatched cells."))
+        checks.append(Check("5.2 main table vs benchmark_12graph/method_mean_metrics.csv", "FAIL", f"{len(rows)} mismatched cells."))
     else:
-        checks.append(Check("5.2 main table vs table_12graph_method_mean_metrics.csv", "PASS", "All reported cells match the CSV source."))
+        checks.append(Check("5.2 main table vs benchmark_12graph/method_mean_metrics.csv", "PASS", "All reported cells match the CSV source."))
     return pd.DataFrame(rows, columns=["method", "metric", "paper_value", "csv_value"])
 
 
 def audit_hast_time_conflicts(checks: list[Check]) -> pd.DataFrame:
-    method_mean = pd.read_csv(PAPER_TABLE_DIR / "table_12graph_method_mean_metrics.csv", encoding="utf-8-sig")
-    main_results = pd.read_csv(PAPER_TABLE_DIR / "table_main_results_unified_hast.csv", encoding="utf-8-sig")
-    stage = pd.read_csv(TABLE_DIR / "motivation_obs2_obs3_stage_evidence.csv", encoding="utf-8-sig")
+    method_mean = pd.read_csv(BENCHMARK_TABLE_DIR / "method_mean_metrics.csv", encoding="utf-8-sig")
+    main_results = pd.read_csv(BENCHMARK_TABLE_DIR / "hast_main_results.csv", encoding="utf-8-sig")
 
     records = []
-    for label, method, stage_name, main_label in [
-        ("HAST-Final-Q", "HAST-Final-Q", "Full HAST-Q", "HAST-Bounded quality"),
-        ("HAST-Final-S", "HAST-Final-S", "Full HAST-S", "HAST-Bounded speed"),
+    for label, method, main_label in [
+        ("HAST-Final-Q", "HAST-Final-Q", "HAST-Bounded quality"),
+        ("HAST-Final-S", "HAST-Final-S", "HAST-Bounded speed"),
     ]:
         values = {
             "method_mean_metrics": float(method_mean.loc[method_mean["method"].eq(method), "mean_time_s"].iloc[0]),
             "main_results_unified": float(main_results.loc[main_results["paper_label_display"].eq(main_label), "time_s"].iloc[0]),
-            "stage_evidence": float(stage.loc[stage["stage"].eq(stage_name), "mean_time_s"].iloc[0]),
         }
         for source, value in values.items():
             records.append({"method": label, "source": source, "time_s": value})
@@ -153,7 +152,7 @@ def audit_hast_time_conflicts(checks: list[Check]) -> pd.DataFrame:
 
 
 def audit_scaling_tables(tables: list[pd.DataFrame], checks: list[Check]) -> pd.DataFrame:
-    full = pd.read_csv(TABLE_DIR / "scaling_full_eval_500_to_10k_unified.csv", encoding="utf-8-sig")
+    full = pd.read_csv(SCALING_TABLE_DIR / "full_eval_500_to_10k_unified.csv", encoding="utf-8-sig")
     summary = full[full["ok"].astype(bool)].groupby(["method", "n"], as_index=False).agg(
         R=("R", "mean"),
         auc_cNBI=("auc_cNBI", "mean"),

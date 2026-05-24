@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Scaling experiment entrypoint skeleton."""
+"""Compatibility wrapper for the scaling experiment contract."""
 
-FULL_EVAL_SIZES = [500, 1000, 5000, 10000]
-RUNTIME_ONLY_SIZES = [500, 1000, 5000, 10000, 50000, 100000, 1000000]
-SEEDS = [42, 43, 44]
-METHODS = ["CoreHD-fast", "HDA-fast", "HDA-original", "HAST-Final-S", "HAST-Final-Q"]
+from __future__ import annotations
+
+import sys
+from pathlib import Path
 
 
-def main() -> None:
-    print(
-        {
-            "full_eval_sizes": FULL_EVAL_SIZES,
-            "runtime_only_sizes": RUNTIME_ONLY_SIZES,
-            "seeds": SEEDS,
-            "methods": METHODS,
-        }
-    )
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from experiments.scaling_contract import main
 
 
 if __name__ == "__main__":
