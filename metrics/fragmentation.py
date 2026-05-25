@@ -155,9 +155,14 @@ def summarize_metrics(df: pd.DataFrame) -> dict[str, float]:
             "final_ACC": float("nan"),
             "final_NCC": float("nan"),
             "final_cNBI": float("nan"),
+            "early_GCC": float("nan"),
+            "early_NCC": float("nan"),
+            "early_cNBI": float("nan"),
             "time_s": float("nan"),
         }
     x = df["removal_ratio"].to_numpy(dtype=float)
+    early_idx = int(np.abs(df["removal_ratio"].to_numpy(dtype=float) - 0.20).argmin())
+    early = df.iloc[early_idx]
     return {
         "R": float(df["GCC"].mean()),
         "auc_ACC": auc_mean(x, df["ACC"].to_numpy(dtype=float)),
@@ -166,5 +171,8 @@ def summarize_metrics(df: pd.DataFrame) -> dict[str, float]:
         "final_ACC": float(df["ACC"].iloc[-1]),
         "final_NCC": float(df["NCC"].iloc[-1]),
         "final_cNBI": float(df["cNBI"].iloc[-1]),
+        "early_GCC": float(early["GCC"]),
+        "early_NCC": float(early["NCC"]),
+        "early_cNBI": float(early["cNBI"]),
         "time_s": float(df["total_time_s"].iloc[-1]),
     }

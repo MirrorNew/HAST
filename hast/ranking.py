@@ -21,11 +21,18 @@ def _rank_series(values: pd.Series, higher_is_better: bool) -> pd.Series:
 def add_rank_scores(df: pd.DataFrame, weights: SearchWeights, root_auc_cNBI: float | None = None) -> pd.DataFrame:
     out = df.copy()
     valid = out["valid"].astype(bool)
-    out["delta_auc_cNBI"] = out["auc_cNBI"] - (root_auc_cNBI if root_auc_cNBI is not None else out["auc_cNBI"].min())
+    root_baseline = root_auc_cNBI if root_auc_cNBI is not None else out["auc_cNBI"].min()
+    out["delta_root_auc_cNBI"] = out["auc_cNBI"] - root_baseline
+    if "parent_auc_cNBI" in out:
+        out["delta_auc_cNBI"] = out["auc_cNBI"] - pd.to_numeric(out["parent_auc_cNBI"], errors="coerce")
+        out.loc[out["delta_auc_cNBI"].isna(), "delta_auc_cNBI"] = out.loc[out["delta_auc_cNBI"].isna(), "delta_root_auc_cNBI"]
+    else:
+        out["delta_auc_cNBI"] = out["delta_root_auc_cNBI"]
     out["rank_relative_credit"] = 0.0
     out["rank_fragmentation"] = 0.0
     out["rank_time"] = 0.0
     out["rank_absolute_quality"] = 0.0
+    out["rank_early_fragmentation"] = 0.0
     out["rank_score"] = -1.0
     if valid.sum() == 0:
         return out
@@ -34,12 +41,21 @@ def add_rank_scores(df: pd.DataFrame, weights: SearchWeights, root_auc_cNBI: flo
     out.loc[idx, "rank_fragmentation"] = _rank_series(out.loc[idx, "R"], False)
     out.loc[idx, "rank_time"] = _rank_series(out.loc[idx, "time_s"], False)
     out.loc[idx, "rank_absolute_quality"] = _rank_series(out.loc[idx, "auc_cNBI"], True)
+    early_cols = {"early_cNBI", "early_NCC", "early_GCC"}
+    if early_cols.issubset(out.columns):
+        out.loc[idx, "rank_early_fragmentation"] = (
+            0.45 * _rank_series(out.loc[idx, "early_cNBI"], True)
+            + 0.35 * _rank_series(out.loc[idx, "early_NCC"], True)
+            + 0.20 * _rank_series(out.loc[idx, "early_GCC"], False)
+        )
     out.loc[idx, "rank_score"] = (
         weights.relative_credit * out.loc[idx, "rank_relative_credit"]
         + weights.fragmentation * out.loc[idx, "rank_fragmentation"]
         + weights.time * out.loc[idx, "rank_time"]
         + weights.absolute_quality * out.loc[idx, "rank_absolute_quality"]
     )
+    if early_cols.issubset(out.columns):
+        out.loc[idx, "rank_score"] = 0.75 * out.loc[idx, "rank_score"] + 0.25 * out.loc[idx, "rank_early_fragmentation"]
     return out
 
 
@@ -73,5 +89,13 @@ def select_final_q_s(frontier: list[dict[str, Any]]) -> dict[str, dict[str, Any]
     if not frontier:
         return {"HAST-Final-Q": None, "HAST-Final-S": None}
     quality = max(frontier, key=lambda r: (float(r["auc_cNBI"]), -float(r["R"])))
-    speed = min(frontier, key=lambda r: (float(r["time_s"]), -float(r["auc_cNBI"])))
+    auc_floor = 0.90 * float(quality["auc_cNBI"])
+    r_floor = float(quality["R"]) + 0.08
+    guarded = [
+        row
+        for row in frontier
+        if float(row["auc_cNBI"]) >= auc_floor and float(row["R"]) <= r_floor
+    ]
+    speed_pool = guarded or frontier
+    speed = min(speed_pool, key=lambda r: (float(r["time_s"]), -float(r["auc_cNBI"]), float(r["R"])))
     return {"HAST-Final-Q": quality, "HAST-Final-S": speed}

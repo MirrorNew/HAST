@@ -24,7 +24,7 @@ from baselines.algorithms import (
     ndjc_order,
 )
 from hast.candidate import make_program
-from hast.search1_3 import run_three_stage_smoke
+from hast.search_stage_1_and_3 import run_three_stage_smoke
 from metrics.fragmentation import compute_metrics, summarize_metrics
 
 import networkx as nx

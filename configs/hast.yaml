@@ -1,0 +1,68 @@
+project: HAST
+llm:
+  model: gpt-5.5
+  reasoning_effort: none
+  temperature: 0.2
+  base_url: https://api.ritelt.com/v1
+budgets:
+  stage1_candidates: 300
+  stage2_llm_calls: 10
+  stage3_candidates: 200
+  candidates_per_llm_call: 1
+  stage3_parent_limit: 24
+  candidate_timeout_s: 90.0
+  delta_credit_mode: parent
+ablation_hooks:
+  e7_additional:
+    delta_credit_mode: root
+    description: same hyperparameters as main HAST, but score tree nodes with AUC-cNBI(h) - AUC-cNBI(HDA-original)
+llm_parallelism:
+  default_workers: 4
+  stage1_candidate_requests: 300
+  stage2_policy_requests: 10
+  stage3_candidate_requests: 200
+datasets:
+  real:
+    - CEnew
+    - Collaboration
+    - condmat
+    - crime
+    - email
+    - Grid
+    - GrQC
+    - hamster
+    - HepPh
+    - PH
+    - Yeast
+  synthetic:
+    - Powerlaw_500
+rates:
+  default: 0.30
+  email: 0.40
+seeds:
+  scaling:
+    - 42
+    - 43
+    - 44
+stage1:
+  name: cost-aware free search
+  root: HDA-original
+  generation: sequential search-tree expansion
+  credit: root-relative Delta AUC-cNBI + R/GCC + lightweight time-aware score
+  active_run: runs_HAST_root_e4_e7_main_tree_20260525
+  audit_columns: parent-relative delta_auc_cNBI and root-relative delta_root_auc_cNBI are both logged
+stage2:
+  name: log-induced bound induction
+  output: family_policy.json, bounds, failure_patterns, replay_report
+  generates_candidates: false
+stage3:
+  name: bounded guided search
+  seed_source: best Stage-1 family or top Stage-1 candidates
+  generation: sequential bounded search-tree expansion
+final_selection:
+  proxy_stage: E6 selects HAST-Final-Q/S from the Stage 3 Pareto frontier
+  validation: E7 evaluates the E6-selected HAST-Final-Q/S on the full 12-graph benchmark and must not overwrite E6 final mappings
+  selector: Pareto frontier
+  labels:
+    - HAST-Final-Q
+    - HAST-Final-S

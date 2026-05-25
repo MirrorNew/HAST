@@ -10,10 +10,11 @@ PAPER_ARTIFACTS_TO_REFRESH = [
     "fig20_framework_search_time.png",
     "scaling_full_eval_500_to_10k_unified.png",
     "runtime_only_scaling_500_to_1000k_unified.png",
-    "fig21_obs1_basic_baseline_same_r_horizontal.png",
 ]
 
-PAPER_ARTIFACTS_TO_KEEP = []
+PAPER_ARTIFACTS_TO_KEEP = [
+    "fig21_obs1_basic_baseline_same_r_horizontal.png",
+]
 
 PAPER_ARTIFACTS_PENDING_REBUILD = [
     "fig22_relative_credit_allocation_effect.png",

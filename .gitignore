@@ -22,6 +22,8 @@ search_frameworks/**/figures/
 artifacts/source_tables/
 artifacts/figures/
 artifacts/reports/
+artifacts/backups/
+analyze_past_results/
 *.log
 llm_calls*.jsonl
 *_raw.csv

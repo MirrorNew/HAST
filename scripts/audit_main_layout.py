@@ -37,12 +37,16 @@ REQUIRED_FILES = [
     "search_frameworks/hast_legacy_search.py",
     "search_frameworks/hast_fac_online_search.py",
     "experiments/README.md",
+    "experiments/hast_main_search.py",
+    "experiments/full_validation.py",
     "experiments/paper_source_tables.py",
     "experiments/motivation_observation_contract.py",
     "experiments/scaling_contract.py",
+    "hast/e4_e6.py",
     "plotting/README.md",
     "plotting/paper_figures.py",
-    "configs/hast_lite_full.yaml",
+    "configs/hast.yaml",
+    "scripts/run_e7_full_validation.py",
 ]
 
 

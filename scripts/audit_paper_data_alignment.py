@@ -3,6 +3,9 @@
 
 The script does not overwrite paper figures. It writes a compact Markdown report
 and diagnostic plots under outputs/figure_audit/.
+
+
+
 """
 
 from __future__ import annotations

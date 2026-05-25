@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Current HAST motivation-observation experiment contract."""
 
-OBSERVATION_2_GROUPS = ["GCC/R-only", "Absolute-cNBI", "Relative-Delta-cNBI"]
+OBSERVATION_2_GROUPS = ["R/GCC-only", "Absolute-cNBI", "Relative-Delta-cNBI"]
 OBSERVATION_3_GROUPS = ["Relative-Free", "CostAware-Free", "Bounded-Guided"]
 CANDIDATES_PER_GROUP = 100
 

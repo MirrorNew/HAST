@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Search/evaluation orchestration for HAST-Lite-Full."""
+"""Search/evaluation orchestration for HAST."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from metrics.fragmentation import compute_metrics, summarize_metrics
 from .candidate import CandidateProgram, compile_candidate
 from .config import STAGE1_WEIGHTS, STAGE3_WEIGHTS, SearchWeights
 from .ranking import add_rank_scores, pareto_frontier, select_final_q_s
-from .stage2 import BoundPolicy, induce_bounds_from_log
+from .search_stage_2 import BoundPolicy, induce_bounds_from_log
 
 
 @dataclass
@@ -33,6 +33,9 @@ class EvaluationRecord:
     final_ACC: float
     final_NCC: float
     final_cNBI: float
+    early_GCC: float
+    early_NCC: float
+    early_cNBI: float
     time_s: float
     graph_count: int
 
@@ -52,7 +55,18 @@ def evaluate_order_fn(
         df = compute_metrics(graph, order, rate=rate, method_time=elapsed)
         summaries.append(summarize_metrics(df))
     out: dict[str, float] = {}
-    for key in ["R", "auc_cNBI", "auc_ACC", "auc_NCC", "final_ACC", "final_NCC", "final_cNBI"]:
+    for key in [
+        "R",
+        "auc_cNBI",
+        "auc_ACC",
+        "auc_NCC",
+        "final_ACC",
+        "final_NCC",
+        "final_cNBI",
+        "early_GCC",
+        "early_NCC",
+        "early_cNBI",
+    ]:
         out[key] = float(sum(row[key] for row in summaries) / max(1, len(summaries)))
     out["time_s"] = total_time / max(1, len(summaries))
     return out
@@ -85,6 +99,9 @@ def evaluate_candidate(program: CandidateProgram, graphs: list[nx.Graph], rate: 
             final_ACC=float("nan"),
             final_NCC=float("nan"),
             final_cNBI=float("nan"),
+            early_GCC=float("nan"),
+            early_NCC=float("nan"),
+            early_cNBI=float("nan"),
             time_s=float("nan"),
             graph_count=len(graphs),
         )

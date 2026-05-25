@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Shared constants for the HAST-Lite-Full project."""
+"""Shared constants for the HAST project."""
 
 from __future__ import annotations
 
@@ -33,12 +33,18 @@ MAIN_BUDGETS = {
     "stage1_candidates": 300,
     "stage2_llm_calls": 10,
     "stage3_candidates": 200,
+    "candidates_per_llm_call": 1,
+    "stage3_parent_limit": 24,
+    "candidate_timeout_s": 90.0,
 }
 
+DELTA_CREDIT_MODES = ["parent", "root"]
+
 LLM_DEFAULTS = {
-    "model": "GPT-5.5",
+    "model": "gpt-5.5",
     "reasoning_effort": "none",
     "temperature": 0.2,
+    "base_url": "https://api.ritelt.com/v1",
 }
 
 

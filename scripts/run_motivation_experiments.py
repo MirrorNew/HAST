@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Compatibility wrapper for the motivation experiment contract."""
+"""Run HAST motivation experiments E1-E3."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from experiments.motivation_observation_contract import main
+from experiments.motivation_observation_experiments import main
 
 
 if __name__ == "__main__":
